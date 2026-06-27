@@ -18,17 +18,16 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # 第 2 步：装好 Ruby（Jekyll 是 Ruby 写的）
+      # 第 2 步：装好 Ruby，并根据 Gemfile 自动安装依赖（含 jekyll 和主题）
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: '3.2'
+          bundler-cache: true       # 自动 bundle install，并缓存加速
 
       # 第 3 步：用 Jekyll 把 Markdown 构建成静态网站，输出到 _site 目录
       - name: Build Jekyll site
-        run: |
-          gem install jekyll
-          jekyll build            # 默认输出目录是 _site
+        run: bundle exec jekyll build   # 通过 bundler 运行，能找到主题
 
       # 第 4 步：把构建产物上传保存（★ 这就是你搜的 upload-artifact ★）
       - name: Upload site artifact
