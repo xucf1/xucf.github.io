@@ -1,37 +1,40 @@
-## Welcome to GitHub Pages
+## 👋 你好，我是 xucf1
 
-You can use the [editor on GitHub](https://github.com/xucf1/xucf.github.io/edit/gh-pages/index.md) to maintain and preview the content for your website in Markdown files.
+欢迎来到我的个人主页！这个网站由 **GitHub Actions 自动构建并部署** —— 我每次往仓库推送内容，它就会自动重新上线。
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+---
 
-### Markdown
+### 🧰 我在做的事
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+- 学习 Git / GitHub 与命令行工具（`gh` CLI）
+- 探索 GitHub Actions 自动化（CI/CD）
+- 用 GitHub Pages + Jekyll 搭建个人网站
 
-```markdown
-Syntax highlighted code block
+---
 
-# Header 1
-## Header 2
-### Header 3
+### 📦 项目展示
 
-- Bulleted
-- List
+| 项目 | 说明 |
+| --- | --- |
+| **本站 (xucf.github.io)** | 用 Jekyll 搭建、GitHub Actions 自动部署的演示站点 |
+| _敬请期待…_ | 更多项目陆续添加中 |
 
-1. Numbered
-2. List
+---
 
-**Bold** and _Italic_ and `Code` text
+### ⚙️ 这个网站是怎么自动上线的
 
-[Link](url) and ![Image](src)
+```text
+修改内容  →  推送到 GitHub  →  Actions 自动构建 (Jekyll)  →  自动部署到 Pages  →  网站更新
 ```
 
-For more details see [Basic writing and formatting syntax](https://docs.github.com/en/github/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax).
+整个过程全自动，我只需要专注写内容。
 
-### Jekyll Themes
+---
 
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/xucf1/xucf.github.io/settings/pages). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
+### 📫 联系我
 
-### Support or Contact
+- GitHub：[@xucf1](https://github.com/xucf1)
 
-Having trouble with Pages? Check out our [documentation](https://docs.github.com/categories/github-pages-basics/) or [contact support](https://support.github.com/contact) and we’ll help you sort it out.
+---
+
+> _本页内容可在 [GitHub 上编辑](https://github.com/xucf1/xucf.github.io/edit/gh-pages/index.md)，推送后会自动重新部署。_
