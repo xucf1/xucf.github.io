@@ -1,0 +1,39 @@
+# 工作流名字（会显示在仓库的 Actions 页面里）
+name: Build site and upload artifact
+
+# 触发条件：什么时候自动运行这个工作流
+on:
+  push:                 # 有人 push 代码时
+    branches:
+      - gh-pages         # 只在 gh-pages 分支上触发
+  workflow_dispatch:     # 也允许在 Actions 页面手动点按钮运行
+
+# 一个工作流由一个或多个 job 组成
+jobs:
+  build:
+    runs-on: ubuntu-latest          # 用 GitHub 提供的 Ubuntu 虚拟机来跑
+
+    steps:
+      # 第 1 步：把仓库代码拉下来（marketplace 上最常用的官方 action）
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # 第 2 步：装好 Ruby（Jekyll 是 Ruby 写的）
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.2'
+
+      # 第 3 步：用 Jekyll 把 Markdown 构建成静态网站，输出到 _site 目录
+      - name: Build Jekyll site
+        run: |
+          gem install jekyll
+          jekyll build            # 默认输出目录是 _site
+
+      # 第 4 步：把构建产物上传保存（★ 这就是你搜的 upload-artifact ★）
+      - name: Upload site artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: my-website        # 产物的名字，下载时会看到
+          path: _site             # 要保存的目录/文件
+          retention-days: 7       # 保留 7 天后自动删除
