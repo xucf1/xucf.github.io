@@ -1,38 +1,62 @@
 # 工作流名字（会显示在仓库的 Actions 页面里）
-name: Build site and upload artifact
+name: Deploy Jekyll site to GitHub Pages
 
-# 触发条件：什么时候自动运行这个工作流
+# 触发条件
 on:
-  push:                 # 有人 push 代码时
+  push:
     branches:
-      - gh-pages         # 只在 gh-pages 分支上触发
-  workflow_dispatch:     # 也允许在 Actions 页面手动点按钮运行
+      - gh-pages
+  workflow_dispatch:     # 也允许手动点按钮运行
 
-# 一个工作流由一个或多个 job 组成
+# 给这次运行的令牌授权：部署 Pages 需要这些权限
+permissions:
+  contents: read         # 读代码
+  pages: write           # 写/部署 GitHub Pages
+  id-token: write        # 部署时做身份校验
+
+# 同一时间只允许一个部署在跑，避免互相覆盖
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
 jobs:
+  # ===== 第一个 job：构建网站 =====
   build:
-    runs-on: ubuntu-latest          # 用 GitHub 提供的 Ubuntu 虚拟机来跑
-
+    runs-on: ubuntu-latest
     steps:
-      # 第 1 步：把仓库代码拉下来（marketplace 上最常用的官方 action）
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # 第 2 步：装好 Ruby，并根据 Gemfile 自动安装依赖（含 jekyll 和主题）
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: '3.2'
-          bundler-cache: true       # 自动 bundle install，并缓存加速
+          bundler-cache: true          # 按 Gemfile 自动装依赖并缓存
 
-      # 第 3 步：用 Jekyll 把 Markdown 构建成静态网站，输出到 _site 目录
-      - name: Build Jekyll site
-        run: bundle exec jekyll build   # 通过 bundler 运行，能找到主题
-
-      # 第 4 步：把构建产物上传保存（★ 这就是你搜的 upload-artifact ★）
-      - name: Upload site artifact
-        uses: actions/upload-artifact@v4
+      # 配置 Pages；enablement: true 会自动帮你开启 GitHub Pages
+      - name: Setup Pages
+        id: pages
+        uses: actions/configure-pages@v5
         with:
-          name: my-website        # 产物的名字，下载时会看到
-          path: _site             # 要保存的目录/文件
-          retention-days: 7       # 保留 7 天后自动删除
+          enablement: true
+
+      - name: Build with Jekyll
+        run: bundle exec jekyll build --baseurl "${{ steps.pages.outputs.base_path }}"
+        env:
+          JEKYLL_ENV: production
+
+      # 把构建好的 _site 打包成 Pages 专用产物
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+
+  # ===== 第二个 job：把产物部署上线 =====
+  deploy:
+    needs: build                       # 等 build 成功后才跑
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}   # 部署后的在线网址
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
