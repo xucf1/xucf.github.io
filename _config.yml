@@ -1,1 +1,4 @@
 theme: jekyll-theme-minimal
+title: xucf1 的网站
+description: 用 GitHub Actions 自动构建并部署的演示站点
+repository: xucf1/xucf.github.io
